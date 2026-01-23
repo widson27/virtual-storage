@@ -10,18 +10,21 @@ const carrinhoOverlay = document.getElementById("carrinho-overlay");
 const fecharCarrinho = document.getElementById("fechar-carrinho");
 const listaItensCarrinho = document.getElementById("carrinho-itens");
 const precoTotalCarrinho = document.getElementById("carrinho-total");
+const botoesFiltro = filtro.querySelectorAll('button');
+
+let carrinho = JSON.parse(localStorage.getItem('carrinho_martins_tech')) || [];
+
+const classeAtivo = "px-4 py-1.5 rounded-full bg-sky-500 text-white text-sm font-medium transition-colors";
+const classeInativo = "px-4 py-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 text-sm font-medium hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors";
 
 function toggleCarrinho() {
     carrinhoLateral.classList.toggle("translate-x-full");
     carrinhoOverlay.classList.toggle("hidden");
 }
 
-
-
-let carrinho = [];
-
-const classeAtivo = "px-4 py-1.5 rounded-full bg-sky-500 text-white text-sm font-medium transition-colors";
-const classeInativo = "px-4 py-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 text-sm font-medium hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors";
+function salvarCarrinho() {
+    localStorage.setItem('carrrinho_martins_tech', JSON.stringify(carrinho));
+}
 
 function renderizarProdutos(produtosParaExibir) {
     listaProdutos.innerHTML = "";
@@ -64,14 +67,12 @@ campoBusca.addEventListener('input', (e) => {
     renderizarProdutos(produtosFiltrados);
 });
 
-const botoesFiltro = filtro.querySelectorAll('button');
 
 function atualizarEstiloBotao(botaoClicado) {
     botoesFiltro.forEach(btn => btn.className = classeInativo);
 
     botaoClicado.className = classeAtivo;
 }
-
 
 botoesFiltro.forEach(botao => {
     botao.addEventListener('click', () => {
@@ -88,7 +89,6 @@ botoesFiltro.forEach(botao => {
     });
 });
 
-
 listaProdutos.addEventListener('click', (e) => {
     if (e.target.classList.contains('btn-comprar')) {
         const idProduto = parseInt(e.target.getAttribute('data-id'));
@@ -101,9 +101,8 @@ function adicionarAoCarrinho(id) {
 
     if (produto) {
         carrinho.push(produto);
+        salvarCarrinho();
         atualizarCarrinhoUi();
-
-        console.log(`Adicionado: ${produto.nome}`);
     }
 }
 
@@ -133,15 +132,13 @@ function atualizarCarrinhoUi() {
 
 window.removerDoCarrinho = (index) => {
     carrinho.splice(index, 1);
+    salvarCarrinho();
     atualizarCarrinhoUi();
 }
-
 
 botaoCarrinho.addEventListener('click', toggleCarrinho);
 fecharCarrinho.addEventListener('click', toggleCarrinho);
 carrinhoOverlay.addEventListener('click', toggleCarrinho);
 
-
-
-
 renderizarProdutos(produtos);
+atualizarCarrinhoUi()
