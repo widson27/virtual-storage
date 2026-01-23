@@ -49,7 +49,7 @@ function toggleCarrinho() {
 }
 
 function salvarCarrinho() {
-    localStorage.setItem('carrrinho_martins_tech', JSON.stringify(carrinho));
+    localStorage.setItem('carrinho_martins_tech', JSON.stringify(carrinho));
 }
 
 function renderizarProdutos(produtosParaExibir) {
@@ -129,7 +129,7 @@ function adicionarAoCarrinho(id) {
         salvarCarrinho();
         atualizarCarrinhoUi();
 
-        mostarToast(`${produto.name} adicionado ao carrinho!`);
+        mostarToast(`${produto.nome} adicionado ao carrinho!`);
     }
 }
 
