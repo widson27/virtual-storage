@@ -1,6 +1,5 @@
 import { produtos } from "./data.js";
 const listaProdutos = document.getElementById("lista-produtos");
-const vitrine = document.getElementById("vitrine");
 const campoBusca = document.getElementById("campo-busca");
 const filtro = document.getElementById("filtros");
 const contadorCarrinho = document.getElementById("carrinho-count");
@@ -11,11 +10,38 @@ const fecharCarrinho = document.getElementById("fechar-carrinho");
 const listaItensCarrinho = document.getElementById("carrinho-itens");
 const precoTotalCarrinho = document.getElementById("carrinho-total");
 const botoesFiltro = filtro.querySelectorAll('button');
+const toastContainer = document.getElementById("toast-container");
 
 let carrinho = JSON.parse(localStorage.getItem('carrinho_martins_tech')) || [];
 
 const classeAtivo = "px-4 py-1.5 rounded-full bg-sky-500 text-white text-sm font-medium transition-colors";
 const classeInativo = "px-4 py-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 text-sm font-medium hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors";
+
+function mostarToast(mensagem) {
+    const toast = document.createElement("div");
+
+    toast.className = `
+        bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 
+        px-6 py-3 rounded-xl shadow-lg border border-sky-500/50
+        flex items-center gap-3 transform transition-all duration-300 
+        translate-y-10 opacity-0 animate-bounce-subtle
+    `;
+    toast.innerHTML = `
+        <span class="text-sky-500 font-bold">✓</span>
+        <span class="text-sm font-medium">${mensagem}</span>
+    `;
+
+    toastContainer.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.remove("translate-y-10", "opacity-0");
+    }, 10);
+
+    setTimeout(() => {
+        toast.classList.add("opacity-0", "translate-x-full");
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
 
 function toggleCarrinho() {
     carrinhoLateral.classList.toggle("translate-x-full");
@@ -67,7 +93,6 @@ campoBusca.addEventListener('input', (e) => {
     renderizarProdutos(produtosFiltrados);
 });
 
-
 function atualizarEstiloBotao(botaoClicado) {
     botoesFiltro.forEach(btn => btn.className = classeInativo);
 
@@ -103,6 +128,8 @@ function adicionarAoCarrinho(id) {
         carrinho.push(produto);
         salvarCarrinho();
         atualizarCarrinhoUi();
+
+        mostarToast(`${produto.name} adicionado ao carrinho!`);
     }
 }
 
