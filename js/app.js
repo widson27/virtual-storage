@@ -3,6 +3,22 @@ const listaProdutos = document.getElementById("lista-produtos");
 const vitrine = document.getElementById("vitrine");
 const campoBusca = document.getElementById("campo-busca");
 const filtro = document.getElementById("filtros");
+const contadorCarrinho = document.getElementById("carrinho-count");
+const botaoCarrinho = document.getElementById("botao-carrinho");
+const carrinhoLateral = document.getElementById("carrinho-lateral");
+const carrinhoOverlay = document.getElementById("carrinho-overlay");
+const fecharCarrinho = document.getElementById("fechar-carrinho");
+const listaItensCarrinho = document.getElementById("carrinho-itens");
+const precoTotalCarrinho = document.getElementById("carrinho-total");
+
+function toggleCarrinho() {
+    carrinhoLateral.classList.toggle("translate-x-full");
+    carrinhoOverlay.classList.toggle("hidden");
+}
+
+
+
+let carrinho = [];
 
 const classeAtivo = "px-4 py-1.5 rounded-full bg-sky-500 text-white text-sm font-medium transition-colors";
 const classeInativo = "px-4 py-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 text-sm font-medium hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors";
@@ -28,7 +44,7 @@ function renderizarProdutos(produtosParaExibir) {
                     <span class="text-xl font-extrabold text-sky-500">
                         ${produto.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                     </span>
-                    <button class="bg-zinc-900 dark:bg-zinc-100 dark:text-zinc-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-sky-500 dark:hover:bg-sky-500 dark:hover:text-white transition-colors">
+                    <button data-id="${produto.id}" class="btn-comprar bg-zinc-900 dark:bg-zinc-100 dark:text-zinc-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-sky-500 dark:hover:bg-sky-500 dark:hover:text-white transition-colors">
                         Comprar
                     </button>
                 </div>
@@ -73,6 +89,57 @@ botoesFiltro.forEach(botao => {
 });
 
 
+listaProdutos.addEventListener('click', (e) => {
+    if (e.target.classList.contains('btn-comprar')) {
+        const idProduto = parseInt(e.target.getAttribute('data-id'));
+        adicionarAoCarrinho(idProduto);
+    }
+});
+
+function adicionarAoCarrinho(id) {
+    const produto = produtos.find(p => p.id === id);
+
+    if (produto) {
+        carrinho.push(produto);
+        atualizarCarrinhoUi();
+
+        console.log(`Adicionado: ${produto.nome}`);
+    }
+}
+
+function atualizarCarrinhoUi() {
+    const totalItens = carrinho.length;
+    contadorCarrinho.innerText = totalItens;
+    contadorCarrinho.classList.toggle('hidden', totalItens === 0);
+
+    listaItensCarrinho.innerHTML = "";
+    carrinho.forEach((item, index) => {
+        const li = document.createElement("li");
+        li.className = "flex gap-4 items-center bg-zinc-50 dark:bg-zinc-900 p-3 rounded-lg border border-zinc-200 dark:border-zinc-800";
+        li.innerHTML = `
+            <img src="${item.imagem}" class="w-16 h-16 object-cover rounded-md">
+            <div class="flex-grow">
+                <h4 class="text-sm font-bold line-clamp-1">${item.nome}</h4>
+                <p class="text-sky-500 font-bold">${item.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+            </div>
+            <button onclick="removerDoCarrinho(${index})" class="text-zinc-400 hover:text-red-500 transition-colors">✕</button>
+        `;
+        listaItensCarrinho.appendChild(li);
+    });
+
+    const total = carrinho.reduce((acc, p) => acc + p.preco, 0);
+    precoTotalCarrinho.innerText = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+window.removerDoCarrinho = (index) => {
+    carrinho.splice(index, 1);
+    atualizarCarrinhoUi();
+}
+
+
+botaoCarrinho.addEventListener('click', toggleCarrinho);
+fecharCarrinho.addEventListener('click', toggleCarrinho);
+carrinhoOverlay.addEventListener('click', toggleCarrinho);
 
 
 
