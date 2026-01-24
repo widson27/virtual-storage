@@ -11,13 +11,17 @@ const listaItensCarrinho = document.getElementById("carrinho-itens");
 const precoTotalCarrinho = document.getElementById("carrinho-total");
 const botoesFiltro = filtro.querySelectorAll('button');
 const toastContainer = document.getElementById("toast-container");
+const banners = document.querySelectorAll('.banner-item');
+const btnPrev = document.getElementById('prev-banner');
+const btnNext = document.getElementById('next-banner');
+let bannerAtual = 0;
 
 let carrinho = JSON.parse(localStorage.getItem('carrinho_martins_tech')) || [];
 
 const classeAtivo = "px-4 py-1.5 rounded-full bg-sky-500 text-white text-sm font-medium transition-colors";
 const classeInativo = "px-4 py-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 text-sm font-medium hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors";
 
-function mostarToast(mensagem) {
+function mostrarToast(mensagem) {
     const toast = document.createElement("div");
 
     toast.className = `
@@ -129,7 +133,7 @@ function adicionarAoCarrinho(id) {
         salvarCarrinho();
         atualizarCarrinhoUi();
 
-        mostarToast(`${produto.nome} adicionado ao carrinho!`);
+        mostrarToast(`${produto.nome} adicionado ao carrinho!`);
     }
 }
 
@@ -166,6 +170,30 @@ window.removerDoCarrinho = (index) => {
 botaoCarrinho.addEventListener('click', toggleCarrinho);
 fecharCarrinho.addEventListener('click', toggleCarrinho);
 carrinhoOverlay.addEventListener('click', toggleCarrinho);
+
+
+function mostrarBanner(index) {
+    banners.forEach((banner, i) => {
+        banner.classList.toggle('opacity-100', i === index);
+        banner.classList.toggle('opacity-0', i !== index);
+        banner.style.zIndex = i === index ? "10" : "0";
+    });
+}
+
+function proximoBanner() {
+    bannerAtual = (bannerAtual + 1) % banners.length;
+    mostrarBanner(bannerAtual);
+}
+
+function bannerAnterior() {
+    bannerAtual = (bannerAtual - 1 + banners.length) % banners.length;
+    mostrarBanner(bannerAtual);
+}
+
+btnNext.addEventListener('click', proximoBanner);
+btnPrev.addEventListener('click', bannerAnterior);
+
+setInterval(proximoBanner, 5000)
 
 renderizarProdutos(produtos);
 atualizarCarrinhoUi()
