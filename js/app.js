@@ -9,38 +9,26 @@ const carrinhoOverlay = document.getElementById("carrinho-overlay");
 const fecharCarrinho = document.getElementById("fechar-carrinho");
 const listaItensCarrinho = document.getElementById("carrinho-itens");
 const precoTotalCarrinho = document.getElementById("carrinho-total");
-const botoesFiltro = filtro.querySelectorAll('button');
+const botoesFiltro = filtro.querySelectorAll("button");
 const toastContainer = document.getElementById("toast-container");
-const banners = document.querySelectorAll('.banner-item');
-const btnPrev = document.getElementById('prev-banner');
-const btnNext = document.getElementById('next-banner');
-let bannerAtual = 0;
+const banners = document.querySelectorAll(".banner-item");
+const btnPrev = document.getElementById("prev-banner");
+const btnNext = document.getElementById("next-banner");
+const botoesBanners = document.querySelectorAll(".btn-banner");
+const btnFinalizar = document.getElementById("btn-finalizar");
 
+let bannerAtual = 0;
 let carrinho = JSON.parse(localStorage.getItem('carrinho_martins_tech')) || [];
 
-const classeAtivo = "px-4 py-1.5 rounded-full bg-sky-500 text-white text-sm font-medium transition-colors";
-const classeInativo = "px-4 py-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 text-sm font-medium hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors";
+const classeAtivo = "px-4 py-1.5 rounded-full bg-sky-500 text-white text-sm font-medium transition-colors cursor-pointer";
+const classeInativo = "px-4 py-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 text-sm font-medium hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors cursor-pointer";
 
 function mostrarToast(mensagem) {
     const toast = document.createElement("div");
-
-    toast.className = `
-        bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 
-        px-6 py-3 rounded-xl shadow-lg border border-sky-500/50
-        flex items-center gap-3 transform transition-all duration-300 
-        translate-y-10 opacity-0 animate-bounce-subtle
-    `;
-    toast.innerHTML = `
-        <span class="text-sky-500 font-bold">✓</span>
-        <span class="text-sm font-medium">${mensagem}</span>
-    `;
-
+    toast.className = `bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 px-6 py-3 rounded-xl shadow-lg border border-sky-500/50 flex items-center gap-3 transform transition-all duration-300 translate-y-10 opacity-0 animate-bounce-subtle`;
+    toast.innerHTML = `<span class="text-sky-500 font-bold">✓</span><span class="text-sm font-medium">${mensagem}</span>`;
     toastContainer.appendChild(toast);
-
-    setTimeout(() => {
-        toast.classList.remove("translate-y-10", "opacity-0");
-    }, 10);
-
+    setTimeout(() => toast.classList.remove("translate-y-10", "opacity-0"), 10);
     setTimeout(() => {
         toast.classList.add("opacity-0", "translate-x-full");
         setTimeout(() => toast.remove(), 300);
@@ -60,9 +48,7 @@ function renderizarProdutos(produtosParaExibir) {
     listaProdutos.innerHTML = "";
     produtosParaExibir.forEach(produto => {
         const li = document.createElement('li');
-
         li.className = "bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden hover:shadow-lg hover:shadow-sky-500/10 transition-all duration-300 group";
-
         li.innerHTML = `
             <div class="relative overflow-hidden">
                 <img src="${produto.imagem}" alt="${produto.nome}" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
@@ -77,71 +63,54 @@ function renderizarProdutos(produtosParaExibir) {
                     <span class="text-xl font-extrabold text-sky-500">
                         ${produto.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                     </span>
-                    <button data-id="${produto.id}" class="btn-comprar bg-zinc-900 dark:bg-zinc-100 dark:text-zinc-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-sky-500 dark:hover:bg-sky-500 dark:hover:text-white transition-colors">
+                    <button data-id="${produto.id}" class="btn-comprar bg-zinc-900 dark:bg-zinc-100 dark:text-zinc-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-sky-500 dark:hover:bg-sky-500 dark:hover:text-white transition-colors cursor-pointer">
                         Comprar
                     </button>
                 </div>
-            </div>
-        `;
+            </div>`;
         listaProdutos.appendChild(li);
     });
 }
 
 campoBusca.addEventListener('input', (e) => {
     const termoBusca = e.target.value.toLowerCase();
-
-    const produtosFiltrados = produtos.filter(produto => {
-        return produto.nome.toLowerCase().includes(termoBusca) || produto.categoria.toLowerCase().includes(termoBusca);
-    });
-
+    const produtosFiltrados = produtos.filter(p => 
+        p.nome.toLowerCase().includes(termoBusca) || p.categoria.toLowerCase().includes(termoBusca)
+    );
     renderizarProdutos(produtosFiltrados);
 });
 
 function atualizarEstiloBotao(botaoClicado) {
     botoesFiltro.forEach(btn => btn.className = classeInativo);
-
     botaoClicado.className = classeAtivo;
 }
 
 botoesFiltro.forEach(botao => {
     botao.addEventListener('click', () => {
-        const categoriaSelecionada = botao.getAttribute('data-categoria');
-
-        if (categoriaSelecionada === 'todos') {
-            renderizarProdutos(produtos);
-        } else {
-            const filtrados = produtos.filter(p => p.categoria === categoriaSelecionada);
-            renderizarProdutos(filtrados);
-        }
-
+        const cat = botao.getAttribute('data-categoria');
+        renderizarProdutos(cat === 'todos' ? produtos : produtos.filter(p => p.categoria === cat));
         atualizarEstiloBotao(botao);
     });
 });
 
 listaProdutos.addEventListener('click', (e) => {
     if (e.target.classList.contains('btn-comprar')) {
-        const idProduto = parseInt(e.target.getAttribute('data-id'));
-        adicionarAoCarrinho(idProduto);
+        const id = parseInt(e.target.getAttribute('data-id'));
+        const produto = produtos.find(p => p.id === id);
+        if (produto) {
+            carrinho.push(produto);
+            salvarCarrinho();
+            atualizarCarrinhoUi();
+            mostrarToast(`${produto.nome} adicionado ao carrinho!`);
+        }
     }
 });
-
-function adicionarAoCarrinho(id) {
-    const produto = produtos.find(p => p.id === id);
-
-    if (produto) {
-        carrinho.push(produto);
-        salvarCarrinho();
-        atualizarCarrinhoUi();
-
-        mostrarToast(`${produto.nome} adicionado ao carrinho!`);
-    }
-}
 
 function atualizarCarrinhoUi() {
     const totalItens = carrinho.length;
     contadorCarrinho.innerText = totalItens;
     contadorCarrinho.classList.toggle('hidden', totalItens === 0);
-
+    
     listaItensCarrinho.innerHTML = "";
     carrinho.forEach((item, index) => {
         const li = document.createElement("li");
@@ -152,11 +121,11 @@ function atualizarCarrinhoUi() {
                 <h4 class="text-sm font-bold line-clamp-1">${item.nome}</h4>
                 <p class="text-sky-500 font-bold">${item.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
             </div>
-            <button onclick="removerDoCarrinho(${index})" class="text-zinc-400 hover:text-red-500 transition-colors">✕</button>
+            <button onclick="removerDoCarrinho(${index})" class="text-zinc-400 hover:text-red-500 transition-colors cursor-pointer">✕</button>
         `;
         listaItensCarrinho.appendChild(li);
     });
-
+    
     const total = carrinho.reduce((acc, p) => acc + p.preco, 0);
     precoTotalCarrinho.innerText = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
@@ -171,7 +140,6 @@ botaoCarrinho.addEventListener('click', toggleCarrinho);
 fecharCarrinho.addEventListener('click', toggleCarrinho);
 carrinhoOverlay.addEventListener('click', toggleCarrinho);
 
-
 function mostrarBanner(index) {
     banners.forEach((banner, i) => {
         banner.classList.toggle('opacity-100', i === index);
@@ -180,20 +148,72 @@ function mostrarBanner(index) {
     });
 }
 
-function proximoBanner() {
+btnNext.addEventListener('click', () => {
     bannerAtual = (bannerAtual + 1) % banners.length;
     mostrarBanner(bannerAtual);
-}
+});
 
-function bannerAnterior() {
+btnPrev.addEventListener('click', () => {
     bannerAtual = (bannerAtual - 1 + banners.length) % banners.length;
     mostrarBanner(bannerAtual);
+});
+
+setInterval(() => {
+    bannerAtual = (bannerAtual + 1) % banners.length;
+    mostrarBanner(bannerAtual);
+}, 5000);
+
+botoesBanners.forEach(botao => {
+    botao.addEventListener('click', () => {
+        const cat = botao.getAttribute('data-categoria');
+        const btnFiltro = Array.from(botoesFiltro).find(btn => btn.getAttribute('data-categoria') === cat);
+        if (btnFiltro) {
+            btnFiltro.click();
+            document.getElementById('vitrine').scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+});
+
+function finalizarCompra() {
+    if (carrinho.length === 0) {
+        mostrarToast("Seu carrinho está vazio!");
+        return;
+    }
+    
+    const overlaySucesso = document.createElement("div");
+    overlaySucesso.className = `fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0`;
+    overlaySucesso.innerHTML = `
+        <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center transform transition-all duration-500 scale-90">
+            <div class="w-20 h-20 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-10 h-10">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                </svg>
+            </div>
+            <h2 class="text-2xl font-black mb-2 dark:text-white">Pedido Confirmado!</h2>
+            <p class="text-zinc-500 dark:text-zinc-400 mb-6">Obrigado por comprar na Martins Tech.</p>
+        </div>`;
+    
+    document.body.appendChild(overlaySucesso);
+    setTimeout(() => {
+        overlaySucesso.classList.replace("opacity-0", "opacity-100");
+        overlaySucesso.querySelector('div').classList.replace("scale-90", "scale-100");
+    }, 10);
+    
+    carrinho = [];
+    salvarCarrinho();
+    atualizarCarrinhoUi();
+    toggleCarrinho();
+    
+    setTimeout(() => {
+        overlaySucesso.classList.replace("opacity-100", "opacity-0");
+        setTimeout(() => {
+            overlaySucesso.remove();
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }, 500);
+    }, 4000);
 }
 
-btnNext.addEventListener('click', proximoBanner);
-btnPrev.addEventListener('click', bannerAnterior);
-
-setInterval(proximoBanner, 5000)
+btnFinalizar.addEventListener('click', finalizarCompra);
 
 renderizarProdutos(produtos);
-atualizarCarrinhoUi()
+atualizarCarrinhoUi();

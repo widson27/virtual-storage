@@ -7,120 +7,147 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
     <title>Martins Tech</title>
+    
+    <style>
+        @keyframes bounce-subtle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .animate-bounce-subtle {
+            animation: bounce-subtle 2s infinite ease-in-out;
+        }
+
+        * {
+            transition-property: background-color, border-color, color, fill, stroke;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 300ms;
+        }
+
+        @theme {
+            --color-zinc-950: #09090b;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #09090b;
+                color: #f4f4f5;
+            }
+        }
+    </style>
 </head>
 
-<body class="bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 min-h-screen transition-colors duration-300">
+<body class="bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 min-h-screen flex flex-col transition-colors duration-300">
 
-    <div id="carrinho-overlay" class="fixed inset-0 bg-black/50 z-[60] hidden backdrop-blur-sm transition-opacity">
-    </div>
+    <div id="carrinho-overlay" class="fixed inset-0 bg-black/50 z-[60] hidden backdrop-blur-sm transition-opacity"></div>
 
     <aside id="carrinho-lateral"
         class="fixed top-0 right-0 h-full w-full sm:w-[400px] bg-white dark:bg-zinc-950 z-[70] shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
         <div class="p-6 border-b border-zinc-200 dark:border-zinc-800 flex justify-between items-center">
             <h2 class="text-xl font-bold">Meu Carrinho</h2>
             <button id="fechar-carrinho"
-                class="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-colors">✕</button>
+                class="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-colors cursor-pointer">✕</button>
         </div>
 
         <ul id="carrinho-itens" class="flex-grow overflow-y-auto p-6 space-y-4">
-        </ul>
+            </ul>
 
         <div class="p-6 border-t border-zinc-200 dark:border-zinc-800 space-y-4">
             <div class="flex justify-between items-center text-lg font-bold">
                 <span>Total:</span>
                 <span id="carrinho-total">R$ 0,00</span>
             </div>
-            <button class="w-full bg-sky-500 hover:bg-sky-600 text-white py-3 rounded-xl font-bold transition-colors">
+            <button id="btn-finalizar"
+                class="w-full bg-sky-500 hover:bg-sky-600 text-white py-3 rounded-xl font-bold transition-colors cursor-pointer">
                 Finalizar Compra
             </button>
         </div>
     </aside>
 
-    <header
-        class="border-b border-zinc-200 dark:border-zinc-800 sticky top-0 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md z-50">
+    <header class="border-b border-zinc-200 dark:border-zinc-800 sticky top-0 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md z-50">
         <div class="container mx-auto px-4 py-4">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-3xl md:text-4xl font-extrabold text-sky-500 tracking-tighter transition-all">
-                    Martins <span class="text-zinc-400 font-thin">Tech</span>
-                </h2>
+            <div class="flex flex-wrap md:flex-nowrap items-center justify-between gap-y-4 gap-x-2">
 
-                <div class="relative cursor-pointer group p-2" id="botao-carrinho">
-                    <span class="text-2xl">🛒</span>
-                    <span id="carrinho-count"
-                        class="absolute top-0 right-0 bg-sky-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold hidden">0</span>
-                </div>
-            </div>
-
-            <div class="flex flex-col md:flex-row gap-4 items-center">
-                <div class="w-full md:flex-grow relative">
-                    <input type="text" id="campo-busca" placeholder="Buscar hardware..."
-                        class="w-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl px-5 py-2.5 focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition-all">
+                <div class="order-1">
+                    <a href="index.html" class="text-2xl md:text-4xl font-extrabold text-sky-500 tracking-tighter cursor-pointer">
+                        Martins <span class="text-zinc-400 font-thin">Tech</span>
+                    </a>
                 </div>
 
-                <nav class="hidden md:block">
-                    <ul class="flex gap-6 font-medium text-sm">
-                        <li class="hover:text-sky-500 cursor-pointer transition-colors">Home</li>
-                        <li class="hover:text-sky-500 cursor-pointer transition-colors">Sobre</li>
-                        <li class="hover:text-sky-500 cursor-pointer transition-colors">Contatos</li>
-                    </ul>
+                <nav class="order-2 md:order-3 flex items-center gap-1 sm:gap-4">
+                    <button class="p-2 text-zinc-600 dark:text-zinc-400 hover:text-sky-500 transition-colors rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                        </svg>
+                    </button>
+
+                    <div class="relative cursor-pointer p-2 text-zinc-600 dark:text-zinc-400 hover:text-sky-500 transition-colors rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800" id="botao-carrinho">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                        </svg>
+                        <span id="carrinho-count" class="absolute top-0 right-0 bg-sky-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold hidden">0</span>
+                    </div>
                 </nav>
+
+                <div class="order-3 md:order-2 w-full md:w-auto md:flex-grow md:mx-8">
+                    <div class="relative">
+                        <input type="text" id="campo-busca" placeholder="Buscar hardware..."
+                            class="w-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl pl-10 pr-5 py-2.5 focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition-all">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">🔍</span>
+                    </div>
+                </div>
+
             </div>
         </div>
     </header>
 
     <section id="hero-carrossel" class="relative container mx-auto px-4 pt-8 overflow-hidden group">
         <div id="carrossel-container" class="relative h-[300px] md:h-[450px] w-full rounded-2xl overflow-hidden">
-
-            <div class="banner-item absolute inset-0 transition-opacity duration-700 opacity-100">
-                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200"
-                    class="w-full h-full object-cover" alt="Setup Gamer">
-                <div
-                    class="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent flex flex-col justify-center px-8 md:px-16">
+            
+            <div class="banner-item absolute inset-0 transition-opacity duration-700 opacity-100 z-10">
+                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200" class="w-full h-full object-cover" alt="Setup Gamer">
+                <div class="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent flex flex-col justify-center px-8 md:px-16">
                     <h2 class="text-white text-3xl md:text-5xl font-black mb-4 uppercase italic">Domine o Jogo</h2>
-                    <p class="text-sky-400 text-lg md:text-xl font-bold mb-6">Hardware de elite para performance máxima.
-                    </p>
-                    <button
-                        class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-8 rounded-lg w-fit transition-all cursor-pointer">Ver
-                        Ofertas</button>
+                    <p class="text-sky-400 text-lg md:text-xl font-bold mb-6">Hardware de elite para performance máxima.</p>
+                    <button data-categoria="hardware" class="btn-banner bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-8 rounded-lg w-fit transition-all cursor-pointer">Ver Ofertas</button>
                 </div>
             </div>
 
             <div class="banner-item absolute inset-0 transition-opacity duration-700 opacity-0">
-                <img src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=1200"
-                    class="w-full h-full object-cover" alt="Periféricos RGB">
-                <div
-                    class="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent flex flex-col justify-center px-8 md:px-16">
+                <img src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=1200" class="w-full h-full object-cover" alt="Periféricos RGB">
+                <div class="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent flex flex-col justify-center px-8 md:px-16">
                     <h2 class="text-white text-3xl md:text-5xl font-black mb-4 uppercase italic">Imersão Total</h2>
-                    <p class="text-sky-400 text-lg md:text-xl font-bold mb-6">Sinta cada detalhe com nossos periféricos.
-                    </p>
-                    <button
-                        class="bg-sky-500 cursor-pointer hover:bg-sky-600 text-white font-bold py-3 px-8 rounded-lg w-fit transition-all">Explorar</button>
+                    <p class="text-sky-400 text-lg md:text-xl font-bold mb-6">Sinta cada detalhe com nossos periféricos.</p>
+                    <button data-categoria="perifericos" class="btn-banner bg-sky-500 cursor-pointer hover:bg-sky-600 text-white font-bold py-3 px-8 rounded-lg w-fit transition-all">Explorar</button>
+                </div>
+            </div>
+            
+            <div class="banner-item absolute inset-0 transition-opacity duration-700 opacity-0">
+                <img src="https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=1200" class="w-full h-full object-cover" alt="Consoles">
+                <div class="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent flex flex-col justify-center px-8 md:px-16">
+                    <h2 class="text-white text-3xl md:text-5xl font-black mb-4 uppercase italic">Jogue Sem Limites</h2>
+                    <p class="text-sky-400 text-lg md:text-xl font-bold mb-6">Consoles de última geração.</p>
+                    <button data-categoria="consoles" class="btn-banner bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-8 rounded-lg w-fit transition-all cursor-pointer">Ver Consoles</button>
                 </div>
             </div>
 
         </div>
 
-        <button id="prev-banner"
-            class="absolute z-20 cursor-pointer left-8 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity">❮</button>
-        <button id="next-banner"
-            class="absolute z-20 cursor-pointer right-8 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity">❯</button>
+        <button id="prev-banner" class="absolute z-20 cursor-pointer left-8 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity">❮</button>
+        <button id="next-banner" class="absolute z-20 cursor-pointer right-8 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity">❯</button>
     </section>
 
     <section id="filtros" class="container mx-auto px-4 py-8 flex flex-wrap gap-2 justify-center">
-        <button data-categoria="todos"
-            class="px-4 py-1.5 rounded-full bg-sky-500 text-white text-sm font-medium hover:bg-sky-600 transition-colors">Todos</button>
-        <button data-categoria="perifericos"
-            class="px-4 py-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 text-sm font-medium hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors">Periféricos</button>
-        <button data-categoria="hardware"
-            class="px-4 py-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 text-sm font-medium hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors">Hardware</button>
-        <button data-categoria="audio"
-            class="px-4 py-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 text-sm font-medium hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors">Audio</button>
+        <button data-categoria="todos" class="px-4 py-1.5 rounded-full bg-sky-500 text-white text-sm font-medium hover:bg-sky-600 transition-colors cursor-pointer">Todos</button>
+        <button data-categoria="perifericos" class="px-4 py-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 text-sm font-medium hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors cursor-pointer">Periféricos</button>
+        <button data-categoria="hardware" class="px-4 py-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 text-sm font-medium hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors cursor-pointer">Hardware</button>
+        <button data-categoria="audio" class="px-4 py-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 text-sm font-medium hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors cursor-pointer">Audio</button>
+        <button data-categoria="consoles" class="px-4 py-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 text-sm font-medium hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors cursor-pointer">Consoles</button>
     </section>
 
     <main id="vitrine" class="container mx-auto px-4 pb-20">
         <ul id="lista-produtos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-
-        </ul>
+            </ul>
     </main>
 
     <footer class="border-t border-zinc-200 dark:border-zinc-800 py-10 mt-auto">
@@ -133,8 +160,6 @@
 
     <div id="toast-container" class="fixed bottom-5 right-5 z-[100] flex flex-col gap-3"></div>
 
-    <script type="module" src="./js/data.js"></script>
     <script type="module" src="./js/app.js"></script>
 </body>
-
 </html>
