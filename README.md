@@ -1,56 +1,106 @@
-# 🚀 Martins Tech - E-commerce Experience
+# 🚀 Martins Tech — E-commerce Front-End
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/widson27/virtual-storage?style=for-the-badge)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-A **Martins Tech** é uma aplicação de e-commerce de alto desempenho, focada na experiência do usuário (UX) e em conceitos avançados de manipulação de dados no Front-end. O projeto simula o fluxo completo de compra de uma loja de hardware e periféricos gamer.
+🔗 **Demo online:**  
+👉 https://virtual-storage-two.vercel.app/
 
+---
 
+## 📌 Sobre o Projeto
 
-## 🛠️ Tecnologias e Conceitos de Engenharia
+**Martins Tech** é uma aplicação de e-commerce desenvolvida com **HTML, Tailwind CSS e JavaScript puro**, simulando uma loja de hardware, periféricos e consoles gamer.
 
-Este projeto foi construído utilizando **Vanilla JavaScript** para demonstrar o domínio da linguagem antes de migrar para frameworks como React ou Vue:
+O objetivo do projeto é demonstrar **domínio de lógica front-end**, manipulação de estado no navegador e foco em **experiência do usuário (UX)**, sem o uso de frameworks.
 
-- **Persistência de Estado**: Uso da **Web Storage API (LocalStorage)** para manter o carrinho do usuário ativo mesmo após o fechamento do navegador.
-- **Componentização via DOM**: Renderização dinâmica de componentes (Cards, Carrinho Lateral e Toasts) baseada em objetos JSON.
-- **Gerenciamento de Fluxo**: Implementação de lógica de adição, remoção e cálculo total com métodos de array (`filter`, `map`, `reduce`, `find`, `splice`).
-- **UX Reativa**: Notificações assíncronas (Toasts) para feedback instantâneo de ações.
-- **Arquitetura CSS-in-HTML**: Uso de **Tailwind CSS** com foco em design responsivo (Mobile-First) e modo escuro nativo.
+---
 
-## ✨ Funcionalidades Avançadas
+## 🛠️ Tecnologias Utilizadas
 
-* **🛒 Carrinho Lateral (Drawer)**: Interface deslizante para gerenciamento de itens com visualização de preço total e remoção individual.
-* **💾 Memória Local**: O carrinho "sobrevive" ao refresh da página, garantindo uma taxa de conversão simulada mais alta.
-* **🔔 Sistema de Toasts**: Notificações animadas que confirmam a adição de produtos sem interromper a navegação.
-* **🔍 Busca Transversal**: Filtro inteligente que busca simultaneamente em nomes e categorias.
-* **📱 Interface Adaptativa**: Layout otimizado para todos os tamanhos de tela, do smartphone ao monitor ultra-wide.
+- **HTML5** — Estrutura semântica
+- **Tailwind CSS** — Estilização responsiva e Dark Mode nativo
+- **JavaScript (ES6+)**
+  - Manipulação do DOM
+  - Gerenciamento de estado
+  - Eventos e animações
+- **LocalStorage API** — Persistência do carrinho
+- **Vercel** — Deploy da aplicação
+
+---
+
+## ✨ Funcionalidades
+
+- 🛒 **Carrinho lateral (Drawer)**
+  - Adição e remoção de produtos
+  - Cálculo automático do valor total
+  - Persistência dos itens mesmo após recarregar a página
+
+- 🔍 **Busca inteligente**
+  - Pesquisa por nome ou categoria em tempo real
+
+- 🗂️ **Filtro por categorias**
+  - Periféricos, Hardware, Áudio, Consoles e mais
+
+- 🔔 **Sistema de Toasts**
+  - Feedback visual ao adicionar produtos ao carrinho
+
+- 🎞️ **Carrossel de banners**
+  - Navegação automática e manual
+  - Integração com filtros da vitrine
+
+- 🌙 **Dark Mode automático**
+  - Baseado nas preferências do sistema
+
+- 📱 **Layout Responsivo**
+  - Mobile, tablet e desktop
+
+---
+
+## 🧠 Conceitos Aplicados
+
+- Manipulação de arrays (`map`, `filter`, `reduce`, `find`, `splice`)
+- Separação de responsabilidades (dados, UI e lógica)
+- Persistência de estado no front-end
+- UX focado em feedback imediato
+- Componentização dinâmica via JavaScript
+
+---
 
 ## 📂 Estrutura do Projeto
 
 ```bash
 ├── index.html
-├── app.js
 ├── js/
-│   └── data.js
-└── README.md
+│   ├── app.js      # Lógica principal da aplicação
+│   └── data.js     # Base de dados simulada (produtos)
+├── README.md
 
-🚀 Como Executar
-Clone o repositório:
+▶️ Como Executar Localmente
+# Clone o repositório
+git clone https://github.com/widson27/virtual-storage.git
 
-Bash
-git clone [https://github.com/widson27/virtual-storage.git](https://github.com/widson27/virtual-storage.git)
-Acesse a pasta e abra o index.html (Recomendado: Live Server do VS Code).
+# Acesse a pasta do projeto
+cd virtual-storage
 
-📈 Roadmap de Evolução
-[x] Implementação de Carrinho Lateral.
+# Abra o index.html
+# (recomendado usar Live Server no VS Code)
 
-[x] Persistência com LocalStorage.
+📈 Roadmap (Próximas Evoluções)
 
-[x] Notificações Toast de feedback.
+ Controle de quantidade por produto no carrinho
 
-[ ] Implementação de Dark/Light mode toggle manual.
+ Toggle manual de Dark / Light Mode
 
-[ ] Página de Checkout com validação de formulário.
+ Página de Checkout com formulário e validação
 
-Desenvolvido com ☕ e código por Widson Martins
+ Integração com API fake (JSON Server)
+
+ Refatoração para arquitetura baseada em módulos
+
+ Autor
+
+Desenvolvido por Widson Martins
+💼 Desenvolvedor Front-End em formação
+📍 Brasil
