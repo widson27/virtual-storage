@@ -77,7 +77,7 @@ O objetivo do projeto é demonstrar **domínio de lógica front-end**, manipula�
 │   └── data.js     # Base de dados simulada (produtos)
 ├── README.md
 
-▶️ Como Executar Localmente
+## ▶️ Como Executar Localmente
 # Clone o repositório
 git clone https://github.com/widson27/virtual-storage.git
 
@@ -87,7 +87,7 @@ cd virtual-storage
 # Abra o index.html
 # (recomendado usar Live Server no VS Code)
 
-📈 Roadmap (Próximas Evoluções)
+## 📈 Roadmap (Próximas Evoluções)
 
  Controle de quantidade por produto no carrinho
 
@@ -99,8 +99,8 @@ cd virtual-storage
 
  Refatoração para arquitetura baseada em módulos
 
- Autor
+## Autor
 
 Desenvolvido por Widson Martins
-💼 Desenvolvedor Front-End em formação
+💼Desenvolvedor Front-End em formação
 📍 Brasil
